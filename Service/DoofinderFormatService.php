@@ -90,7 +90,7 @@ class DoofinderFormatService
     {
         return ProductPriceQuery::create()
             ->useCurrencyQuery()
-            ->filterByCode(Doofinder::getConfigValue(Doofinder::DOOFINDER_SEARCH_ENGINE_CURRENCY_CONFIG_KEY))
+            ->filterByByDefault(1)
             ->endUse()
             ->findOneByProductSaleElementsId($pseId);
     }

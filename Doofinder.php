@@ -19,13 +19,6 @@ class Doofinder extends BaseModule
     public const DOOFINDER_USER_TOKEN_CONFIG_KEY = 'doofinder_user_token';
     public const DOOFINDER_USER_ID_CONFIG_KEY = 'doofinder_user_id';
 
-    // Doofinder Search Engine Setting
-    public const DOOFINDER_SEARCH_ENGINE_CONFIG_KEY = 'doofinder_search_engine';
-    public const DOOFINDER_SEARCH_ENGINE_LANG_CONFIG_KEY = 'doofinder_search_engine_lang';
-    public const DOOFINDER_SEARCH_ENGINE_STATUS_CONFIG_KEY = 'doofinder_search_engine_status';
-    public const DOOFINDER_SEARCH_ENGINE_CURRENCY_CONFIG_KEY = 'doofinder_search_engine_currency';
-    public const DOOFINDER_SEARCH_ENGINE_FEED_CONFIG_KEY = 'doofinder_search_engine_feed';
-
     // Doofinder Front Hooks
     public const DOOFINDER_HOOK_SEARCH_SCRIPT_CONFIG_KEY = 'doofinder_hook_search_script';
     public const DOOFINDER_BASIC_SEARCH_BAR_CONFIG_KEY = 'doofinder_basic_search_bar';
