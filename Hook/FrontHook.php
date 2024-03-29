@@ -16,7 +16,7 @@ class FrontHook extends BaseHook
                     'query_input_id' => Doofinder::getConfigValue(Doofinder::DOOFINDER_QUERY_INPUT_ID_CONFIG_KEY),
                     'hash_id' => Doofinder::getConfigValue(Doofinder::DOOFINDER_HASH_ID_CONFIG_KEY),
                     'search_zone' => Doofinder::getConfigValue(Doofinder::DOOFINDER_SEARCH_ZONE_CONFIG_KEY),
-                    'lang' => $this->getLang(),
+                    'lang' => $this->getLang()->getCode(),
                     'basic_input' => Doofinder::getConfigValue(Doofinder::DOOFINDER_BASIC_SEARCH_BAR_CONFIG_KEY)
                 ]
             )
@@ -26,7 +26,7 @@ class FrontHook extends BaseHook
     public static function getSubscribedHooks(): array
     {
         return [
-            Doofinder::getConfigValue(Doofinder::DOOFINDER_HOOK_SEARCH_SCRIPT_CONFIG_KEY) => [
+            Doofinder::getConfigValue(Doofinder::DOOFINDER_HOOK_SEARCH_SCRIPT_CONFIG_KEY, 'main.content-top') => [
                 [
                     "type" => "front",
                     "method" => "addDoofinderSearchScript"

@@ -2,8 +2,7 @@
 
 namespace Doofinder\Command;
 
-use Doofinder\Service\ApiDoofinderManagementService;
-use Doofinder\Service\DoofinderFormatService;
+use Doofinder\Service\DoofinderService;
 use Doofinder\Shared\Exceptions\ApiException;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,8 +13,7 @@ use Thelia\Log\Tlog;
 class SynchronizeDoofinderProductCommand extends ContainerAwareCommand
 {
     public function __construct(
-        protected ApiDoofinderManagementService $apiDoofinderManagementService,
-        protected DoofinderFormatService $formatService
+        protected DoofinderService $doofinderService,
     ) {
         parent::__construct();
     }
@@ -34,9 +32,9 @@ class SynchronizeDoofinderProductCommand extends ContainerAwareCommand
         $output->write("Product synchronization start\n");
 
         try {
-            $results = $this->apiDoofinderManagementService->synchronizeDoofinderProducts();
+            $results = $this->doofinderService->synchronizeDoofinderProducts();
 
-            $output->write($this->formatService->formatResponse($results));
+            $output->write($results);
         } catch (ApiException|PropelException $e) {
             Tlog::getInstance()->error($e->getMessage());
             $output->write("Product synchronization Failed\n");

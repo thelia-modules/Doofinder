@@ -10,6 +10,7 @@ return array(
     'Doofinder User configuration' => 'Configuration de l\'utilisateur Doofinder',
     'Doofinder admin interface' => 'Interface Administrateur Doofinder',
     'Doofinder configuration' => 'Configuration Doofinder',
+    'Excluded Product' => 'Produits Exclus',
     'Front Hooks' => 'Point d\'accroche en front-office',
     'Hash ID' => 'Hash ID',
     'Language' => 'Langue',
@@ -21,5 +22,6 @@ return array(
     'Syncronization failed' => 'Synchronization échouée',
     'Syncronization success' => 'Synchronization réussie',
     'Syncronize all products' => 'Synchroniser tous les produits',
+    'This product is exclude from Doofinder Search Engine' => 'Ce produit est exclu du moteur de recherche Doofinder',
     'URL product feeds' => 'Url du flux produits',
 );

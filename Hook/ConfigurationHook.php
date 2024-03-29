@@ -33,12 +33,12 @@ class ConfigurationHook extends BaseHook
                 "module_configuration.html",
                 [
                     'feeds' => $indices,
-                    "search_engine" => $searchEngine['name'],
-                    "search_engine_lang" => $searchEngine['language'],
+                    "search_engine" => $searchEngine['name'] ?? '',
+                    "search_engine_lang" => $searchEngine['language'] ?? '',
                     "search_engine_server" => Doofinder::getConfigValue(Doofinder::DOOFINDER_SEARCH_ZONE_CONFIG_KEY),
                     "search_engine_hash_id" => Doofinder::getConfigValue(Doofinder::DOOFINDER_HASH_ID_CONFIG_KEY),
-                    "search_engine_currency" => $searchEngine['currency'],
-                    "search_engine_status" => !$searchEngine['inactive']
+                    "search_engine_currency" => $searchEngine['currency'] ?? '',
+                    "search_engine_status" => !($searchEngine['inactive'] ?? false)
                 ]
         ));
     }
