@@ -32,7 +32,7 @@ class DoofinderFormatService
         $locale = $this->getLocale();
 
         foreach ($product->getCategories() as $category) {
-            $categories[] = $category->setLocale($locale)->getTitle();
+            $categories[] = $category->setLocale($locale)->getTitle() ?? "";
         }
 
         $features = [];

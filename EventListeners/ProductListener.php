@@ -2,6 +2,7 @@
 
 namespace Doofinder\EventListeners;
 
+use Doofinder\Doofinder;
 use Doofinder\Service\DoofinderService;
 use Doofinder\Shared\Exceptions\ApiException;
 use Exception;
@@ -74,6 +75,10 @@ class ProductListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents(): array
     {
+        if (!Doofinder::getConfigValue(Doofinder::DOOFINDER_REAL_TIME_SYNC_CONFIG_KEY)) {
+            return [];
+        }
+
         return array(
             ProductEvent::POST_UPDATE => ["onProductSave", 200],
 

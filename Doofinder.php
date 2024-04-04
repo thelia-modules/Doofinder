@@ -30,6 +30,9 @@ class Doofinder extends BaseModule
     public const DOOFINDER_STATE_UPDATED = 'updated';
     public const DOOFINDER_STATE_DELETED = 'deleted';
 
+    // Doofinder parameters
+    public const DOOFINDER_REAL_TIME_SYNC_CONFIG_KEY = 'doofinder_real_time_sync';
+
     /*
      * You may now override BaseModuleInterface methods, such as:
      * install, destroy, preActivation, postActivation, preDeactivation, postDeactivation

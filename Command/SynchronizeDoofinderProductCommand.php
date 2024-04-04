@@ -36,8 +36,9 @@ class SynchronizeDoofinderProductCommand extends ContainerAwareCommand
 
             $output->write($results);
         } catch (ApiException|PropelException $e) {
-            Tlog::getInstance()->error($e->getMessage());
+            Tlog::getInstance()->error($e->getMessage()." : ". $e->getBody());
             $output->write("Product synchronization Failed\n");
+            $output->write("Erreur " .$e->getMessage()." : ". $e->getBody() );
         }
 
         $output->write("End of Product synchronization\n");
