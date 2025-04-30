@@ -13,15 +13,19 @@
         <language>en_US</language>
         <language>fr_FR</language>
     </languages>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <authors>
         <author>
             <name>DA SILVA MENDONCA Thomas</name>
             <email>tdasilva@openstudio.fr</email>
         </author>
+        <author>
+          <name>LASHERMES Arthur</name>
+          <email>alashermes@openstudio.fr</email>
+        </author>
     </authors>
     <type>classic</type>
-    <thelia>2.5.0</thelia>
+    <thelia>2.6.0</thelia>
     <stability>other</stability>
     <mandatory>0</mandatory>
     <hidden>0</hidden>
