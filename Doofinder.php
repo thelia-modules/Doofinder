@@ -13,6 +13,8 @@ class Doofinder extends BaseModule
     public const DOMAIN_NAME = 'doofinder';
     public const DOOFINDER_URL = 'https://%s-api.doofinder.com';
 
+    public const DOOFINDER_SEARCH_URL = 'https://%s-search.doofinder.com';
+
     // Doofinder Configuration
     public const DOOFINDER_SEARCH_ZONE_CONFIG_KEY = 'doofinder_search_zone';
     public const DOOFINDER_HASH_ID_CONFIG_KEY = 'doofinder_hash_id';
