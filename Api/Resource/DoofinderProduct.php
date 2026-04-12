@@ -3,6 +3,8 @@
 namespace Doofinder\Api\Resource;
 
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\Parameter;
 use Doofinder\Api\Provider\DoofinderSearchProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 use ApiPlatform\Metadata\ApiResource;
@@ -11,17 +13,9 @@ use ApiPlatform\Metadata\ApiResource;
     operations: [
         new GetCollection(
             uriTemplate: '/doofinder/search',
-            openapiContext: [
-                'parameters' => [
-                    [
-                        'name' => 'search',
-                        'in' => 'query',
-                        'required' => false,
-                        'schema' => ['type' => 'string'],
-                        'description' => 'Termes de recherche'
-                    ]
-                ]
-            ],
+            openapi: new Operation(parameters: [
+                new Parameter(name: 'search', in: 'query', required: false, schema: ['type' => 'string'], description: 'Termes de recherche'),
+            ]),
             provider: DoofinderSearchProvider::class
         )
     ],

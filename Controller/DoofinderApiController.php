@@ -8,7 +8,7 @@ use Doofinder\Shared\Exceptions\ApiException;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Thelia\Controller\Admin\AdminController;
 use Thelia\Log\Tlog;
 use Thelia\Tools\URL;
