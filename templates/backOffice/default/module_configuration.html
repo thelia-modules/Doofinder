@@ -19,6 +19,7 @@
                         <ul id="tabbed-menu" class="nav nav-tabs">
                             <li class="{if $tab eq "config"}active{/if}"><a data-toggle="tab" href="#config">{intl l="Configuration" d='doofinder.bo.default'}</a> </li>
                             <li class="{if $tab eq "engine"}active{/if}"><a data-toggle="tab" href="#engine">{intl l="Search Engine" d='doofinder.bo.default'}</a> </li>
+                            <li class="{if $tab eq "parameters"}active{/if}"><a data-toggle="tab" href="#parameters">{intl l="Parameters" d='doofinder.bo.default'}</a> </li>
                             <li class="{if $tab eq "front_hooks"}active{/if}"><a data-toggle="tab" href="#front_hooks">{intl l="Front Hooks" d='doofinder.bo.default'}</a> </li>
                             <li class="{if $tab eq "excluded"}active{/if}"><a data-toggle="tab" href="#excluded">{intl l="Excluded Product" d='doofinder.bo.default'}</a> </li>
                         </ul>
@@ -81,6 +82,37 @@
                                         </li>
                                     {/loop}
                                 </ul>
+                            </div>
+
+                            <div id="parameters" class="tab-pane {if $tab eq "parameters"}active{/if} form-container">
+                                <br>
+
+                                {form name="doofinder_form_parameter_form"}
+                                    <form method="POST" action="{url path="/admin/module/Doofinder/parameters"}" {form_enctype} >
+
+                                        {render_form_field field="success_url" value={url path='/admin/module/Doofinder'}}
+                                        {render_form_field field="error_url" value={url path='/admin/module/Doofinder'}}
+
+                                        {form_hidden_fields}
+
+                                        {if $form_error}
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="alert alert-danger">{$form_error_message}</div>
+                                                </div>
+                                            </div>
+                                        {/if}
+
+                                        <div class="col-md-6">
+                                            <div class="title">
+                                                {intl l="Doofinder Parameters" d='doofinder.bo.default'}
+                                            </div>
+                                            {render_form_field field='real_time_sync'}
+                                            <button type="submit" class="btn btn-success" >{intl l="Save Parameters" d="doofinder.bo.default"}</button>
+                                        </div>
+                                    </form>
+                                {/form}
+
                             </div>
 
                             <div id="front_hooks" class="tab-pane {if $tab eq "front_hooks"}active{/if} form-container">
@@ -173,6 +205,7 @@
                                     </table>
 
                                     <a href="/admin/module/Doofinder/sync/all" class="btn btn-success {if !$search_engine_status} disabled {/if}">{intl l="Syncronize all products" d="doofinder.bo.default"}</a>
+                                    <a href="/admin/module/Doofinder/sync/reset/all" class="btn btn-success {if !$search_engine_status} disabled {/if}">{intl l="Syncronize all products with reset" d="doofinder.bo.default"}</a>
                                 </div>
                             </div>
                         </div>

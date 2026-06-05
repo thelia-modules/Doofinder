@@ -12,6 +12,7 @@ class Doofinder extends BaseModule
 {
     public const DOMAIN_NAME = 'doofinder';
     public const DOOFINDER_URL = 'https://%s-api.doofinder.com';
+    public const DOOFINDER_SEARCH_URL = 'https://%s-search.doofinder.com';
 
     // Doofinder Configuration
     public const DOOFINDER_SEARCH_ZONE_CONFIG_KEY = 'doofinder_search_zone';
@@ -29,6 +30,13 @@ class Doofinder extends BaseModule
     public const DOOFINDER_STATE_CREATED = 'created';
     public const DOOFINDER_STATE_UPDATED = 'updated';
     public const DOOFINDER_STATE_DELETED = 'deleted';
+
+    // Doofinder parameters
+    public const DOOFINDER_REAL_TIME_SYNC_CONFIG_KEY = 'doofinder_real_time_sync';
+
+    public const DOOFINDER_DF_SCORE = 'doofinder_df_score';
+    public const DOOFINDER_DEFAULT_CONFIG_DF_SCORE = 'doofinder_default_config_df_score';
+
 
     /*
      * You may now override BaseModuleInterface methods, such as:

@@ -11,5 +11,14 @@
         <behavior name="timestampable" />
     </table>
 
+    <table name="doofinder_dfscore_product" namespace="Doofinder\Model">
+        <column name="product_id" primaryKey="true" required="true" type="INTEGER" />
+        <column defaultValue="1.0" name="dfscore" type="FLOAT" />
+        <foreign-key foreignTable="product" name="fk_doofinder_dfscore_product_product_id" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference foreign="id" local="product_id" />
+        </foreign-key>
+        <behavior name="timestampable" />
+    </table>
+
   <external-schema filename="local/config/schema.xml" referenceOnly="true" />
 </database>

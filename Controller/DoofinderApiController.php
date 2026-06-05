@@ -2,8 +2,7 @@
 
 namespace Doofinder\Controller;
 
-use Doofinder\Service\ApiDoofinderManagementService;
-use Doofinder\Service\DoofinderFormatService;
+use Doofinder\Service\DoofinderService;
 use Doofinder\Shared\Exceptions\ApiException;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -16,10 +15,7 @@ use Thelia\Tools\URL;
 #[Route('/admin/module/Doofinder', name: 'admin_doofinder_api_')]
 class DoofinderApiController extends AdminController
 {
-    public function __construct(
-        protected ApiDoofinderManagementService $apiDoofinderManagementService,
-        protected DoofinderFormatService $formatService
-    ) {}
+    public function __construct(protected DoofinderService $doofinderService,) {}
 
     #[Route('/sync/all', name: 'import_all')]
     public function syncAllProducts(): RedirectResponse|Response
@@ -27,9 +23,25 @@ class DoofinderApiController extends AdminController
         $sync = "success";
 
         try {
-            $results = $this->apiDoofinderManagementService->synchronizeDoofinderProducts();
+            Tlog::getInstance()->info($this->doofinderService->synchronizeDoofinderProducts());
+        } catch (ApiException|Exception $e) {
+            Tlog::getInstance()->error($e->getMessage());
+            $sync = "failed";
+        }
 
-            $this->formatService->formatResponse($results);
+        return new RedirectResponse(URL::getInstance()->absoluteUrl('/admin/module/Doofinder', ['sync' => $sync]));
+    }
+
+    /**
+     * Remove all products from Doofinder and import them again
+     */
+    #[Route('/sync/reset/all', name: 'import_reset_all')]
+    public function syncResetAllProducts(): RedirectResponse|Response
+    {
+        $sync = "success";
+
+        try {
+            Tlog::getInstance()->info($this->doofinderService->synchronizeDoofinderProducts(reset: true));
         } catch (ApiException|Exception $e) {
             Tlog::getInstance()->error($e->getMessage());
             $sync = "failed";

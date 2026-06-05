@@ -5,15 +5,14 @@ namespace Doofinder\Controller;
 use Doofinder\Doofinder;
 use Doofinder\Form\ConfigurationForm;
 use Doofinder\Form\FrontHooksForm;
+use Doofinder\Form\ParameterForm;
 use Doofinder\Service\ApiDoofinderManagementService;
-use Doofinder\Shared\Exceptions\ApiException;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Thelia\Controller\Admin\AdminController;
 use Thelia\Core\Template\ParserContext;
-use Thelia\Core\Translation\Translator;
 use Thelia\Form\Exception\FormValidationException;
 
 #[Route('/admin/module/Doofinder', name: 'admin_doofinder_config_')]
@@ -60,6 +59,31 @@ class ConfigurationController extends AdminController
             Doofinder::setConfigValue(Doofinder::DOOFINDER_HOOK_SEARCH_SCRIPT_CONFIG_KEY, $data["hook_search_script"]);
             Doofinder::setConfigValue(Doofinder::DOOFINDER_BASIC_SEARCH_BAR_CONFIG_KEY, (bool) $data["basic_search_bar"]);
             Doofinder::setConfigValue(Doofinder::DOOFINDER_QUERY_INPUT_ID_CONFIG_KEY, $data["query_input_id"]);
+
+            return $this->generateSuccessRedirect($form);
+        } catch (FormValidationException $e) {
+            $errorMessage = $this->createStandardFormValidationErrorMessage($e);
+        } catch (Exception $e) {
+            $errorMessage = $e->getMessage();
+        }
+
+        $form->setErrorMessage($errorMessage);
+
+        $parserContext
+            ->addForm($form)
+            ->setGeneralError($errorMessage);
+
+        return $this->generateErrorRedirect($form);
+    }
+
+    #[Route('/parameters', name: 'parameters', methods: 'POST')]
+    public function saveParameters(ParserContext $parserContext): RedirectResponse|Response
+    {
+        $form = $this->createForm(ParameterForm::getName());
+        try {
+            $data = $this->validateForm($form)->getData();
+
+            Doofinder::setConfigValue(Doofinder::DOOFINDER_REAL_TIME_SYNC_CONFIG_KEY, (bool) $data["real_time_sync"]);
 
             return $this->generateSuccessRedirect($form);
         } catch (FormValidationException $e) {
