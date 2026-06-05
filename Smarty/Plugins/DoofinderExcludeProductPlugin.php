@@ -2,17 +2,18 @@
 
 namespace Doofinder\Smarty\Plugins;
 
+use Doofinder\Doofinder;
 use Doofinder\Model\DoofinderExcludedProductQuery;
 use TheliaSmarty\Template\AbstractSmartyPlugin;
 use TheliaSmarty\Template\SmartyPluginDescriptor;
 
 class DoofinderExcludeProductPlugin extends AbstractSmartyPlugin
 {
-
     public function getPluginDescriptors(): array
     {
         return [
-            new SmartyPluginDescriptor('function', 'getExcludeProduct', $this, 'getExcludeProduct')
+            new SmartyPluginDescriptor('function', 'getExcludeProduct', $this, 'getExcludeProduct'),
+            new SmartyPluginDescriptor('function', 'doofinderHashId', $this, 'getDoofinderHashId'),
         ];
     }
 
@@ -28,5 +29,9 @@ class DoofinderExcludeProductPlugin extends AbstractSmartyPlugin
         }
 
         $smarty->assign('isExclude', false);
+    }
+    public function getDoofinderHashId($param, $smarty): string
+    {
+        return Doofinder::getConfigValue(Doofinder::DOOFINDER_HASH_ID_CONFIG_KEY);
     }
 }

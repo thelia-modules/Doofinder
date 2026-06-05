@@ -14,6 +14,27 @@
     var dfClassicLayers = [{
         hashid: '{$hash_id}',
         zone: '{$search_zone}',
-        queryInput: '#{$query_input_id}'
+        queryInput: '#{$query_input_id}',
+        display: {
+            lang: '{$lang}',
+            left: "20%",
+            facets: {
+                attached: 'left',
+                custom: [
+                    {
+                        name: 'best_price', label: '{intl l='Price' d='doofinder.fo.default'}'
+                    },
+                    {
+                        name: 'brand', label: '{intl l='Brand' d='doofinder.fo.default'}'
+                    },
+                    {
+                        name: 'categories', label: '{intl l='Category' d='doofinder.fo.default'}'
+                    },
+                    {
+                        name: 'features', label: '{intl l='Feature' d='doofinder.fo.default'}'
+                    }
+                ]
+            }
+        }
     }];
 </script>

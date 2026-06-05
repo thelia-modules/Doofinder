@@ -2,11 +2,11 @@
 
 namespace Doofinder\Command;
 
-use Doofinder\Service\ApiDoofinderManagementService;
-use Doofinder\Service\DoofinderFormatService;
+use Doofinder\Service\DoofinderService;
 use Doofinder\Shared\Exceptions\ApiException;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Thelia\Command\ContainerAwareCommand;
 use Thelia\Log\Tlog;
@@ -14,8 +14,7 @@ use Thelia\Log\Tlog;
 class SynchronizeDoofinderProductCommand extends ContainerAwareCommand
 {
     public function __construct(
-        protected ApiDoofinderManagementService $apiDoofinderManagementService,
-        protected DoofinderFormatService $formatService
+        protected DoofinderService $doofinderService,
     ) {
         parent::__construct();
     }
@@ -24,7 +23,13 @@ class SynchronizeDoofinderProductCommand extends ContainerAwareCommand
     {
         $this
             ->setName('module:doofinder:synchronize')
-            ->setDescription('Synchronize product with Doofinder API');
+            ->setDescription('Synchronize product with Doofinder API')
+            ->addOption(
+                'reset',
+                null,
+                InputOption::VALUE_NONE,
+                'Reset all products from Doofinder'
+            );
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int
@@ -32,14 +37,16 @@ class SynchronizeDoofinderProductCommand extends ContainerAwareCommand
         $this->initRequest();
 
         $output->write("Product synchronization start\n");
+        $reset = $input->getOption('reset');
 
         try {
-            $results = $this->apiDoofinderManagementService->synchronizeDoofinderProducts();
+            $results = $this->doofinderService->synchronizeDoofinderProducts(reset: $reset);
 
-            $output->write($this->formatService->formatResponse($results));
+            $output->write($results);
         } catch (ApiException|PropelException $e) {
-            Tlog::getInstance()->error($e->getMessage());
+            Tlog::getInstance()->error($e->getMessage()." : ". $e->getBody());
             $output->write("Product synchronization Failed\n");
+            $output->write("Erreur " .$e->getMessage()." : ". $e->getBody() );
         }
 
         $output->write("End of Product synchronization\n");

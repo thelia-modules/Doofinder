@@ -5,12 +5,14 @@ namespace Doofinder\Controller;
 use Doofinder\Service\ApiDoofinderManagementService;
 use Doofinder\Service\DoofinderExcludedProductService;
 use Doofinder\Service\DoofinderFormatService;
+use Doofinder\Service\DoofinderService;
 use Doofinder\Shared\Exceptions\ApiException;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\HttpFoundation\JsonResponse;
+use Thelia\Log\Tlog;
 
 #[Route('/admin/doofinder/excluded/product', name: 'admin_doofinder_excluded_product_')]
 class DoofinderExcludedProduct extends BaseAdminController
@@ -22,8 +24,7 @@ class DoofinderExcludedProduct extends BaseAdminController
     #[Route('/{id}', name: 'exclude_product', methods: 'POST')]
     public function excludeProduct(
         DoofinderExcludedProductService $doofinderExcludedProductService,
-        ApiDoofinderManagementService $apiDoofinderManagementService,
-        DoofinderFormatService $formatService,
+        DoofinderService $doofinderService,
         RequestStack $requestStack,
         int $id
     ): JsonResponse
@@ -39,8 +40,7 @@ class DoofinderExcludedProduct extends BaseAdminController
             $jsonResponse['included'] = $doofinderExcludedProductService->includeProduct($id);
         }
 
-        $results = $apiDoofinderManagementService->synchronizeDoofinderProducts($id);
-        $formatService->formatResponse($results);
+        Tlog::getInstance()->info($doofinderService->synchronizeDoofinderProducts($id));
 
         return new JsonResponse($jsonResponse);
     }
