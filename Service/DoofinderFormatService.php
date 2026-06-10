@@ -11,8 +11,8 @@ use Thelia\Model\Product;
 use Thelia\Model\ProductPriceQuery;
 use Thelia\Model\ProductSaleElements;
 use Thelia\Model\TaxRule;
-use Thelia\TaxEngine\Calculator;
-use Thelia\TaxEngine\TaxEngine;
+use Thelia\Domain\Taxation\TaxEngine\Calculator;
+use Thelia\Domain\Taxation\TaxEngine\TaxEngine;
 use Thelia\Tools\URL;
 
 class DoofinderFormatService
