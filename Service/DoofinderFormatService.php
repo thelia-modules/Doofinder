@@ -13,6 +13,7 @@ use Thelia\Model\LangQuery;
 use Thelia\Model\Product;
 use Thelia\Model\ProductImageQuery;
 use Thelia\Model\ProductPriceQuery;
+use Thelia\Model\ProductSaleElementsQuery;
 use Thelia\Model\TaxRule;
 use Thelia\TaxEngine\Calculator;
 use Thelia\TaxEngine\TaxEngine;
@@ -53,18 +54,14 @@ class DoofinderFormatService
         if (!$this->hasValidPrice($product)){
             throw new \RuntimeException('No valid sale elements found for product with ref : '.$product->getRef(). '. Please ensure each sale element has a price greater than zero.');
         }
-        return [
+
+        $shared = [
             'availability' => $this->getAvailability($product),
             'brand' => (string)$product->getBrand()?->setLocale($locale)->getTitle(),
             'categories' => $categories,
             'description' => $product->getDescription(),
-            //'group_id' => (string)$product->getId(),
-            //'gtin' => $productSaleElements->getEanCode(),
-            'id' => (string)$product->getId(),
+            'group_id' => (string)$product->getId(),
             'image_link' => $this->getImageLink($product),
-            'link' => $this->getProductLink($product, $locale),
-            'mpn' => $product->getRef(),
-            'reference' => $product->getRef(),
             'variant_references' => $this->getVariantReferences($product),
             'df_manual_boost' => (float)$dfscore,
             'best_price' => (string)$this->getProductPrice($product, $product->getTaxRule(), true),
@@ -72,15 +69,36 @@ class DoofinderFormatService
             'title' => $product->setLocale($locale)->getTitle(),
             'features' => $features
         ];
+
+        $baseLink = $this->getProductLink($product, $locale);
+        $saleElements = $product->getProductSaleElementss();
+        $hasVariants = count($saleElements) > 1;
+
+        $items = [];
+        foreach ($saleElements as $productSaleElements) {
+            $ref = $productSaleElements->getRef();
+            $items[] = $shared + [
+                'id' => (string)$productSaleElements->getId(),
+                'link' => $this->buildVariantLink($baseLink, (string)$productSaleElements->getId(), $hasVariants),
+                'mpn' => $ref,
+                'reference' => $ref,
+            ];
+        }
+
+        return $items;
     }
     /**
      * @throws PropelException
      */
     public function formatIndexImportDelete(int $productId): array
     {
-        return [
-            'id' => (string)$productId,
-        ];
+        $pseIds = ProductSaleElementsQuery::create()
+            ->filterByProductId($productId)
+            ->select('Id')
+            ->find()
+            ->toArray();
+
+        return array_map(static fn ($id): array => ['id' => (string)$id], $pseIds);
     }
 
     public function formatResponse(array $results): string
@@ -205,6 +223,17 @@ class DoofinderFormatService
     private function getProductLink(Product $product, string $locale): ?string
     {
         return URL::getInstance()->absoluteUrl($product->getRewrittenUrl($locale));
+    }
+
+    private function buildVariantLink(?string $baseLink, ?string $variantKey, bool $hasVariants): ?string
+    {
+        if ($baseLink === null || !$hasVariants || $variantKey === null || $variantKey === '') {
+            return $baseLink;
+        }
+
+        $separator = str_contains($baseLink, '?') ? '&' : '?';
+
+        return $baseLink.$separator.'declinaison='.rawurlencode($variantKey);
     }
 
     /**

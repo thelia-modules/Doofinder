@@ -10,6 +10,8 @@ use Thelia\Model\ProductSaleElements;
 
 class DoofinderBuilderService
 {
+    private const BULK_ITEM_LIMIT = 100;
+
     public function __construct(
         protected DoofinderFormatService $formatService
     )
@@ -21,27 +23,35 @@ class DoofinderBuilderService
      */
     public function buildItemParam($products, $isDelete = false): array
     {
-        $countItems = 0;
-        $itemParams = [];
+        $batches = [];
+        $currentBatch = [];
 
         /** @var Product $product */
-        foreach ($products as $key => $productSaleElements) {
-            if ($key % 100 === 0) {
-                $countItems++;
-            }
+        foreach ($products as $product) {
             try {
-                if ($isDelete) {
-                    $itemParams[$countItems][] = $this->formatService->formatIndexImportDelete($productSaleElements->getId());
-                } else {
-                    $itemParams[$countItems][] = $this->formatService->formatIndexImport($productSaleElements);
-                }
-            }catch (RuntimeException $exception){
+                $items = $isDelete
+                    ? $this->formatService->formatIndexImportDelete($product->getId())
+                    : $this->formatService->formatIndexImport($product);
+            } catch (RuntimeException $exception) {
                 Tlog::getInstance()->error($exception->getMessage());
                 continue;
             }
+
+            foreach ($items as $item) {
+                $currentBatch[] = $item;
+
+                if (count($currentBatch) === self::BULK_ITEM_LIMIT) {
+                    $batches[] = $currentBatch;
+                    $currentBatch = [];
+                }
+            }
         }
 
-        return $itemParams;
+        if ($currentBatch !== []) {
+            $batches[] = $currentBatch;
+        }
+
+        return $batches;
     }
 
     /**
