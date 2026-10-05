@@ -2,7 +2,8 @@
     <div class="card-body">
         <div class="form-check form-switch">
             <input type="checkbox" class="form-check-input" id="doofinder-is-excluded"
-                   data-exclude-url="{{ path('admin_doofinder_excluded_product_exclude_product', {'id': product_id}) }}?_token={{ assignToken() }}"
+                   data-exclude-url="{{ path('admin_doofinder_excluded_product_exclude_product', {'id': product_id}) }}"
+                   data-token="{{ assignToken() }}"
                    value="1" {{ is_excluded ? 'checked' }}>
             <label class="form-check-label" for="doofinder-is-excluded">
                 <strong>{{ 'Doofinder Search Engine'|trans({}, 'doofinder.bo.default') }}</strong><br>
@@ -21,6 +22,7 @@
         switchInput.addEventListener('change', function (event) {
             const isExcluded = event.target.checked;
             const body = new URLSearchParams();
+            body.append('_token', event.target.dataset.token);
             body.append('is_excluded', isExcluded ? 'true' : 'false');
 
             fetch(event.target.dataset.excludeUrl, {

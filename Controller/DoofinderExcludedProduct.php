@@ -31,7 +31,7 @@ class DoofinderExcludedProduct extends BaseAdminController
     ): JsonResponse
     {
         $request = $requestStack->getCurrentRequest();
-        $tokenProvider->checkToken((string) $request->query->get('_token'));
+        $tokenProvider->checkToken((string) $request->request->get('_token'));
 
         $jsonResponse = [];
         $data = $request->request->get('is_excluded');
