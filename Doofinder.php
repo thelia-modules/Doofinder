@@ -59,7 +59,7 @@ class Doofinder extends BaseModule
      * @param $newVersion
      * @param ConnectionInterface $con
      */
-    public function update($currentVersion, $newVersion, ConnectionInterface $con = null): void
+    public function update($currentVersion, $newVersion, ?ConnectionInterface $con = null): void
     {
         $updateDir = __DIR__.DS.'Config'.DS.'update';
 
@@ -83,7 +83,7 @@ class Doofinder extends BaseModule
         }
     }
 
-    public function postActivation(ConnectionInterface $con = null): void
+    public function postActivation(?ConnectionInterface $con = null): void
     {
         $database = new Database($con);
 
