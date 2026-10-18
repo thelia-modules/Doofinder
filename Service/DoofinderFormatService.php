@@ -140,7 +140,7 @@ class DoofinderFormatService
             $price = $productPrice?->getPromoPrice();
         }
 
-        return $calculator->getTaxedPrice($price);
+        return $calculator->getTaxedPrice((float) $price);
     }
     private function getProductLink(Product $product, string $locale): ?string
     {
