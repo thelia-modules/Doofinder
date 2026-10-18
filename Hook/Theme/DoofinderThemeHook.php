@@ -8,18 +8,21 @@ use Doofinder\Doofinder;
 use Thelia\Core\Hook\Theme\ThemeHookInterface;
 use Twig\Environment;
 
-final readonly class DoofinderThemeHook implements ThemeHookInterface
+final class DoofinderThemeHook implements ThemeHookInterface
 {
+    private ?string $configuredHook = null;
+
     public function __construct(
-        private Environment $twig,
+        private readonly Environment $twig,
     ) {
     }
 
     public function supports(string $hookName): bool
     {
-        $configuredHook = Doofinder::getConfigValue(Doofinder::DOOFINDER_HOOK_SEARCH_SCRIPT_CONFIG_KEY);
+        // supports() runs for every theme hook of the page: read the setting once.
+        $this->configuredHook ??= (string) Doofinder::getConfigValue(Doofinder::DOOFINDER_HOOK_SEARCH_SCRIPT_CONFIG_KEY, '');
 
-        return \is_string($configuredHook) && '' !== $configuredHook && $configuredHook === $hookName;
+        return '' !== $this->configuredHook && $this->configuredHook === $hookName;
     }
 
     public function render(string $hookName, array $parameters): string

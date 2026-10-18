@@ -21,7 +21,7 @@ class FrontHooksForm extends BaseForm
                     'label' => Translator::getInstance()->trans('Hook Search Script', [], Doofinder::DOMAIN_NAME),
                     'label_attr' => [
                         'for' => 'search_zone',
-                        'help' => Translator::getInstance()->trans("hook of doofinder search script", [], Doofinder::DOMAIN_NAME),
+                        'help' => Translator::getInstance()->trans("hook of doofinder search script. Use a theme hook name such as layout.head.bottom or layout.body.bottom", [], Doofinder::DOMAIN_NAME),
                     ],
                     'data' => Doofinder::getConfigValue(Doofinder::DOOFINDER_HOOK_SEARCH_SCRIPT_CONFIG_KEY)
                 ]

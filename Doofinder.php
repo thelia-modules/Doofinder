@@ -26,6 +26,16 @@ class Doofinder extends BaseModule
     public const DOOFINDER_BASIC_SEARCH_BAR_CONFIG_KEY = 'doofinder_basic_search_bar';
     public const DOOFINDER_QUERY_INPUT_ID_CONFIG_KEY = 'doofinder_query_input_id';
 
+    public const DOOFINDER_DEFAULT_HOOK_SEARCH_SCRIPT = 'layout.body.bottom';
+
+    /** Smarty hook names that older versions accepted, and the theme hook that replaces each. */
+    private const LEGACY_HOOK_SEARCH_SCRIPT_MAP = [
+        'main.head-top' => 'layout.head.top',
+        'main.head-bottom' => 'layout.head.bottom',
+        'main.body-top' => 'layout.body.top',
+        'main.body-bottom' => 'layout.body.bottom',
+    ];
+
     // Doofinder product state synchronize
     public const DOOFINDER_STATE_CREATED_UPDATED = 'created_update';
     public const DOOFINDER_STATE_CREATED = 'created';
@@ -81,6 +91,28 @@ class Doofinder extends BaseModule
                 $database->insertSql(null, [$file->getPathname()]);
             }
         }
+
+        if (version_compare($currentVersion, '2.2.1', '<')) {
+            $this->migrateLegacySearchScriptHook();
+        }
+    }
+
+    /**
+     * Since 2.2.0 the search script setting holds a theme hook name (layout.*). A value left over
+     * from the Smarty era is mapped to its theme hook, or reset to the default when unknown.
+     */
+    private function migrateLegacySearchScriptHook(): void
+    {
+        $current = (string) self::getConfigValue(self::DOOFINDER_HOOK_SEARCH_SCRIPT_CONFIG_KEY, '');
+
+        if ('' === $current || str_starts_with($current, 'layout.')) {
+            return;
+        }
+
+        self::setConfigValue(
+            self::DOOFINDER_HOOK_SEARCH_SCRIPT_CONFIG_KEY,
+            self::LEGACY_HOOK_SEARCH_SCRIPT_MAP[$current] ?? self::DOOFINDER_DEFAULT_HOOK_SEARCH_SCRIPT,
+        );
     }
 
     public function postActivation(?ConnectionInterface $con = null): void
