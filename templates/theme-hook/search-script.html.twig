@@ -1,9 +1,9 @@
-{if $basic_input}
-    <input type="text" id="{$query_input_id}">
-{/if}
+{% if basic_input %}
+    <input type="text" id="{{ query_input_id }}">
+{% endif %}
 
 <script>
-    var doofinder_script ='//cdn.doofinder.com/media/js/doofinder-classic.7.latest.min.js';
+    var doofinder_script = '//cdn.doofinder.com/media/js/doofinder-classic.7.latest.min.js';
     (function(d,t){
             f=d.createElement(t);
             s=d.getElementsByTagName(t)[0];f.async=1;
@@ -12,8 +12,8 @@
             s.parentNode.insertBefore(f,s)}(document,'script')
     );
     var dfClassicLayers = [{
-        hashid: '{$hash_id}',
-        zone: '{$search_zone}',
-        queryInput: '#{$query_input_id}'
+        hashid: '{{ hash_id|e('js') }}',
+        zone: '{{ search_zone|e('js') }}',
+        queryInput: '#{{ query_input_id|e('js') }}'
     }];
 </script>
