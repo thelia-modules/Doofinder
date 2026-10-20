@@ -8,9 +8,11 @@ use Doofinder\Service\DoofinderFormatService;
 use Doofinder\Shared\Exceptions\ApiException;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\HttpFoundation\JsonResponse;
+use Thelia\Log\Tlog;
 use Thelia\Tools\TokenProvider;
 
 #[Route('/admin/doofinder/excluded/product', name: 'admin_doofinder_excluded_product_')]
@@ -44,8 +46,20 @@ class DoofinderExcludedProduct extends BaseAdminController
             $jsonResponse['included'] = $doofinderExcludedProductService->includeProduct($id);
         }
 
-        $results = $apiDoofinderManagementService->synchronizeDoofinderProducts($id);
-        $formatService->formatResponse($results);
+        try {
+            $results = $apiDoofinderManagementService->synchronizeDoofinderProducts($id);
+            $formatService->formatResponse($results);
+        } catch (ApiException|\Throwable $exception) {
+            Tlog::getInstance()->error(sprintf(
+                'Doofinder synchronization of product %d failed: %s',
+                $id,
+                $exception->getMessage()
+            ));
+
+            $jsonResponse['error'] = 'The product was saved but its synchronization with Doofinder failed. Check the module configuration and the logs.';
+
+            return new JsonResponse($jsonResponse, Response::HTTP_BAD_GATEWAY);
+        }
 
         return new JsonResponse($jsonResponse);
     }
